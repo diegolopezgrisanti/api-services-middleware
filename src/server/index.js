@@ -36,7 +36,13 @@ class Server {
         this._app.use(express.json());
 
         const corsOptions = {
-            origin: config.CORS_ORIGIN,
+            origin: function (origin, callback) {
+                if (config.CORS_ORIGIN.includes(origin)) {
+                  callback(null, true)
+                } else {
+                  callback(new Error('Not allowed by CORS'))
+                }
+            }
         }
         this._app.use(cors(corsOptions));
 

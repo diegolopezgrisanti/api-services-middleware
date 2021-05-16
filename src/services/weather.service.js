@@ -7,13 +7,7 @@ class WeatherService {
     }
 
     getWeather = async (city) => {
-        try {
-
-            return await this._weatherAPI.getWeatherByCity(city);
-
-        } catch (error) {
-            throw error;
-        }
+        return await this._weatherAPI.getWeatherByCity(city);
     }
     
 }
