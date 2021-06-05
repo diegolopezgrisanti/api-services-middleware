@@ -25,11 +25,15 @@ class Server {
     }
 
     start = () => {
-        this._app.listen(config.PORT, () => {
+        return this._app.listen(config.PORT, () => {
             console.log(`${config.APP_NAME} running on port ${config.PORT}`);
         })
     }
 
+    close = () => {
+        this._app.close();
+    }
+    
     initMiddlewares = () => {
         console.log("Initializing middlewares...");
         this._app.use(express.urlencoded({ extended: false }));
@@ -44,8 +48,8 @@ class Server {
                 }
             }
         }
-        this._app.use(cors(corsOptions));
-
+        //this._app.use(cors(corsOptions));
+        this._app.use(cors());
     }
 
     initRouters = () => {

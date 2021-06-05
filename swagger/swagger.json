@@ -1,0 +1,180 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "api-services-middleware",
+    "description": "API to serve as a middleware to consume different external APIs.",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "diegolopezgrisanti@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://api-services-middleware-ok.herokuapp.com/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "weather",
+      "description": "api to know the weather status from city"
+    }
+  ],
+  "paths": {
+    "/weather": {
+      "get": {
+        "tags": [
+          "weather"
+        ],
+        "summary": "Search weather by city",
+        "description": "Returns weather information for a city",
+        "operationId": "getWeatherByCity",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "description": "city name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Paris"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseOk"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseErrorNotParam"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseErrorNotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "responseOk": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "example": "Paris"
+          },
+          "temperature": {
+            "type": "number",
+            "example": 12.19
+          },
+          "weather_description": {
+            "type": "string",
+            "example": "broken clouds"
+          },
+          "humidity": {
+            "type": "number",
+            "example": 87
+          },
+          "visibility": {
+            "type": "number",
+            "example": 10000
+          },
+          "pressure": {
+            "type": "number",
+            "example": 1004
+          },
+          "wind": {
+            "type": "object",
+            "properties": {
+              "speed": {
+                "type": "number",
+                "example": 20
+              },
+              "direction": {
+                "type": "string",
+                "example": "OSO"
+              }
+            }
+          }
+        }
+      },
+      "responseErrorNotParam": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "City query param is required"
+          }
+        }
+      },
+      "responseErrorNotFound": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "example": 404
+          },
+          "message": {
+            "type": "string",
+            "example": "City not found"
+          }
+        }
+      },
+      "responseError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "example": "Problem connecting with Weather API"
+          }
+        }
+      }
+    }
+  }
+}
