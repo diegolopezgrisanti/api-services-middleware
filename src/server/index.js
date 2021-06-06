@@ -3,7 +3,8 @@ const routers = require('../routes');
 const { ErrorMiddleware } = require("../middlewares");
 const config = require("../config");
 const cors = require('cors');
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../../swagger/swagger.json');
 class Server {
 
     constructor(){
@@ -55,6 +56,20 @@ class Server {
     initRouters = () => {
         console.log("Initializing routes...");
         this._app.use("/weather", this._routers.WeatherRoutes);
+
+        // Swagger UI
+        const options = {
+            swaggerOptions: {
+                validatorUrl: null
+            },
+            customCss: '.swagger-ui .topbar { display: none }'
+        };
+        
+        this._app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+        this._app.get("/swagger.json", function (req, res) {
+            res.setHeader("Content-Type", "application/json");
+            res.send(swaggerDocument);
+        })        
     }
 }
 
